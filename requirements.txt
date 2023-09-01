@@ -1,2 +1,5 @@
 uvicorn[standard]==0.23.*
 fastapi==0.101.*
+PyJWT==2.8.0
+python-decouple==3.8
+pydantic==2.3.0
