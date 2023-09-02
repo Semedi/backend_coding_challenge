@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 
 from ..dependencies import get_token_header
+from .. import models
 
 router = APIRouter(
-    prefix="/items",
-    tags=["items"],
+    prefix="/ecgs",
+    tags=["ecgs"],
     dependencies=[Depends(get_token_header)],
     responses={404: {"description": "Not found"}},
 )
@@ -13,26 +14,16 @@ router = APIRouter(
 fake_items_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
 
 
-@router.get("/")
-async def read_items():
+@router.get("")
+async def read_ecgs():
+    if not fake_items_db:
+        raise HTTPException(status_code=404, detail="Can't find any ecgs")
     return fake_items_db
 
 
-@router.get("/{item_id}")
-async def read_item(item_id: str):
-    if item_id not in fake_items_db:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return {"name": fake_items_db[item_id]["name"], "item_id": item_id}
+@router.post("", responses={403: {"description": "Operation forbidden"}})
+async def create_ecg(ecg: models.Ecg = Body(...)):
+    print(ecg)
 
 
-@router.put(
-    "/{item_id}",
-    tags=["custom"],
-    responses={403: {"description": "Operation forbidden"}},
-)
-async def update_item(item_id: str):
-    if item_id != "plumbus":
-        raise HTTPException(
-            status_code=403, detail="You can only update the item: plumbus"
-        )
-    return {"item_id": item_id, "name": "The great Plumbus"}
+    return {"item_id": "test", "name": "The great Plumbus"}
