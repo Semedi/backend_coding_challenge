@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Body
+from fastapi import APIRouter, Body
 from .. import models
 from .. import persistence
 from ..auth.auth_handler import signJWT
