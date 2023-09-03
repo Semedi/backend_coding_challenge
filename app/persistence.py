@@ -1,10 +1,19 @@
 from . import models
 
-users = []
+users = [
+    models.User(
+        name = "admin",
+        password = "admin",
+        role = 0
+    )
+]
 
-def check_user(data: models.User):
+ecgs = {}
+
+def check_user(username: str, password: str) -> models.User | None:
     for user in users:
-        if user.name == data.name and user.password == data.password:
-            return True
-    return False
+        if user.name == username and user.password == password:
+            return user
+
+    return None
 

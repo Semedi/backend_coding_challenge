@@ -1,38 +1,31 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Depends, Request
 from .. import models
 from .. import persistence
 from ..auth.auth_handler import signJWT
+from ..auth.auth_bearer import JWTBearer
 
 router = APIRouter()
 
+@router.post("/users/create", tags=["users"], dependencies=[Depends(JWTBearer(required_role=models.ADMIN_ROLE))])
+async def create_user(request: Request, user: models.User = Body(...)):
 
-@router.post("/users/signup", tags=["users"])
-async def create_user(user: models.User = Body(...)):
     # replace with db call, making sure to hash the password first
     persistence.users.append(user) 
+
     return {
         "message": "user created"
     }
 
-
 @router.post("/user/login", tags=["users"])
-async def user_login(user: models.User = Body(...)):
-    if persistence.check_user(user):
-        return signJWT(user.name)
+async def user_login(username: str = Body(), password: str = Body()):
+    muser = persistence.check_user(username, password)
+    if muser is not None:
+        return signJWT(muser.name, muser.role)
+
     return {
         "error": "Wrong login details!"
     }
 
-@router.get("/users/", tags=["users"])
-async def read_users():
-    return models.persistence
-
-
-@router.get("/users/me", tags=["users"])
-async def read_user_me():
-    return {"username": "fakecurrentuser"}
-
-
-@router.get("/users/{username}", tags=["users"])
-async def read_user(username: str):
-    return {"username": username}
+@router.get("/users/me", tags=["users"], dependencies=[Depends(JWTBearer())])
+async def read_user_me(request: Request):
+    return {"username": request.state.user}

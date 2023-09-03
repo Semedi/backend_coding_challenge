@@ -1,8 +1,12 @@
 from pydantic import BaseModel
 
+ADMIN_ROLE = 0
+USER_ROLE = 1
+
 class User(BaseModel):
     name: str
     password: str
+    role: int = 1
 
 class Lead(BaseModel):
     name: str
