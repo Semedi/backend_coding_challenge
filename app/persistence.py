@@ -5,6 +5,11 @@ users = [
         name = "admin",
         password = "admin",
         role = 0
+    ),
+    models.User(
+        name = "test",
+        password = "test",
+        role = 1
     )
 ]
 
@@ -16,4 +21,3 @@ def check_user(username: str, password: str) -> models.User | None:
             return user
 
     return None
-

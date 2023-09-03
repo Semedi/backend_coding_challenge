@@ -34,21 +34,3 @@ class JWTBearer(HTTPBearer):
             return True
 
         return self.required_role == required_role
-        
-
-
-
-
-        return self.required_role != -1
-
-    def verify_jwt(self, jwtoken: str) -> bool:
-        isTokenValid: bool = False
-
-        try:
-            payload = decodeJWT(jwtoken)
-        except:
-            payload = None
-
-        if payload:
-            isTokenValid = True
-        return isTokenValid

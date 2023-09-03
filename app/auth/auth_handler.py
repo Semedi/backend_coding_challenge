@@ -1,13 +1,10 @@
 import time
 from typing import Dict
-
 import jwt
-
 
 # should not be here
 JWT_SECRET = "this_is_a_secret"
 JWT_ALGORITHM = "HS256"
-
 
 def token_response(token: str):
     return {
@@ -30,7 +27,6 @@ def decodeJWT(token: str) -> dict:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         if decoded_token["expires"] >= time.time(): 
             return decoded_token 
-
     except:
         pass
 

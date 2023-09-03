@@ -17,6 +17,3 @@ class Ecg(BaseModel):
     id: str
     date: str
     leads: list[Lead]
-
-
-
