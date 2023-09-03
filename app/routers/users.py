@@ -16,7 +16,7 @@ async def create_user(request: Request, user: models.User = Body(...)):
         "message": "user created"
     }
 
-@router.post("/user/login", tags=["users"])
+@router.post("/users/login", tags=["users"])
 async def user_login(username: str = Body(), password: str = Body()):
     muser = persistence.check_user(username, password)
     if muser is not None:
